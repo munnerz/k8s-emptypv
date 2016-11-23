@@ -86,6 +86,11 @@ func mount(args []string) (FlexOutput, error) {
 		options.ReadWrite = "rw"
 	}
 
+	err = os.MkdirAll(target, 0755)
+	if err != nil {
+		return FlexOutput{FlexStatusFailure, fmt.Sprintf("failed to create target mount point: %s", err.Error()), ""}, err
+	}
+	
 	mountArgs := makeMountArgs(source, target, "", []string{"bind", options.ReadWrite})
 
 	command := exec.Command(mountCmd, mountArgs...)
